@@ -5,8 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table( name ="CUSTOMER_TBL")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
 	@Id

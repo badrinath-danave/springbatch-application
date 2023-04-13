@@ -1,5 +1,7 @@
 package com.springbatch.app.config;
 
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -37,7 +39,7 @@ public class SpringBatchConfig {
 	@Bean  //reads the information from source , here .CSV file
 	FlatFileItemReader<Customer> reader(){
 		FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
-		itemReader.setResource(new FileSystemResource("src/main/resource/customer.csv"));
+		itemReader.setResource(new FileSystemResource("D:\\LearnSpringFramework\\practice-workspace-project\\springbatch-application\\src\\main\\resources\\customers.csv"));
 		itemReader.setName("csvReader");
 		itemReader.setLinesToSkip(1);
 		itemReader.setLineMapper(lineMapper());
@@ -78,5 +80,20 @@ public class SpringBatchConfig {
 	}
 	
 	
+	@Bean
+	public Step step1() {
+		return  stepBuilderFactory.get("csv-step").<Customer, Customer>chunk(10)
+				.reader(reader())
+				.processor(processor())
+				.writer(writer()).build()
+				;
+	}
+	
+	
+	@Bean
+	public Job job() {
+		return jobBuilderFactory.get("import-customers")
+				.flow(step1()).end().build();
+	}
 	
 }
