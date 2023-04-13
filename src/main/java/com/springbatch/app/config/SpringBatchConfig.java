@@ -3,6 +3,7 @@ package com.springbatch.app.config;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
@@ -60,4 +61,22 @@ public class SpringBatchConfig {
 		lineMapper.setFieldSetMapper(fieldSetMapper);
 		return lineMapper;
 	}
+	
+	@Bean
+	public CustomItemProcessor processor() {
+		return new CustomItemProcessor();
+	}
+	
+	
+	@Bean
+	public RepositoryItemWriter<Customer> writer(){
+		RepositoryItemWriter<Customer> writer= new RepositoryItemWriter<>();
+		
+		writer.setRepository(customerRepository);
+		writer.setMethodName("save");
+		return writer;
+	}
+	
+	
+	
 }
